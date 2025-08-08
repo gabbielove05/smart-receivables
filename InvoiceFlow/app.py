@@ -181,10 +181,9 @@ def render_configuration_panel():
         # This will be populated by the data quality module
         if 'quality_score' in st.session_state:
             score = st.session_state.quality_score
-            color = "green" if score > 0.8 else "orange" if score > 0.6 else "red"
-            st.markdown(f"<div style='background-color: {color}; color: white; padding: 5px; border-radius: 3px; text-align: center;'>{score:.1%} Quality</div>", unsafe_allow_html=True)
+            st.metric("Quality Score", f"{score:.1%}")
         else:
-            st.markdown("<div style='background-color: gray; color: white; padding: 5px; border-radius: 3px; text-align: center;'>No Data</div>", unsafe_allow_html=True)
+            st.info("No Data")
         
         auto_refresh = st.checkbox("Auto-refresh (30s)", value=False, key="auto_refresh")
     
