@@ -19,6 +19,11 @@ def call_ai(messages, model="openrouter/auto", max_tokens=700, temperature=0.2, 
     api_key = _get_secret("OPENROUTER_API_KEY")
     if not api_key:
         raise RuntimeError("Missing OPENROUTER_API_KEY")
+    
+    # Debug: Print what we're using
+    print(f"🔍 Using API key: {api_key[:10]}...{api_key[-4:]}")
+    print(f"🔍 Using model: {model}")
+    print(f"🔍 Using referer: {_get_secret('APP_REFERRER', 'None')}")
 
     headers = {
         "Authorization": f"Bearer {api_key}",
