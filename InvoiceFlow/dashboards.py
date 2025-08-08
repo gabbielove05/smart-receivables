@@ -30,13 +30,8 @@ def render_cfo_panel(df: pd.DataFrame, config: Dict[str, Any]) -> None:
         
         # Top row - Executive Summary
         st.markdown("#### 🎯 Executive Summary")
-        st.markdown(f"""
-        <div style='background: linear-gradient(90deg, #0066CC 0%, #003366 100%); 
-                    color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;'>
-            <h4 style='margin-top: 0; color: #FFD700;'>📈 Financial Intelligence Brief</h4>
-            <p style='font-size: 1.1rem; margin-bottom: 0;'>{executive_summary}</p>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown("**📈 Financial Intelligence Brief**")
+        st.markdown(executive_summary)
         
         # Key metrics cards
         col1, col2, col3, col4 = st.columns(4)
@@ -375,26 +370,15 @@ def calculate_key_metrics(df: pd.DataFrame) -> Dict[str, float]:
         return {}
 
 def render_metric_card(title: str, value: str, change: float, subtitle: str) -> None:
-    """Render a metric card with gradient background."""
-    change_color = "#00FF00" if change >= 0 else "#FF6B6B"
+    """Render a metric card with simple styling."""
     change_symbol = "↗" if change >= 0 else "↘"
     
-    st.markdown(f"""
-    <div style='
-        background: linear-gradient(135deg, #0066CC 0%, #003366 100%);
-        color: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 102, 204, 0.3);
-        text-align: center;
-        margin-bottom: 10px;
-    '>
-        <h4 style='margin: 0 0 10px 0; color: #FFD700; font-size: 0.9rem;'>{title}</h4>
-        <h2 style='margin: 0 0 5px 0; font-size: 1.8rem;'>{value}</h2>
-        <p style='margin: 0; font-size: 0.8rem; color: #E0E0E0;'>{subtitle}</p>
-        {f'<p style="margin: 5px 0 0 0; color: {change_color}; font-size: 0.9rem;">{change_symbol} {abs(change):.1f}</p>' if change != 0 else ''}
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(f"**{title}**")
+    st.markdown(f"**{value}**")
+    st.markdown(subtitle)
+    if change != 0:
+        st.markdown(f"{change_symbol} {abs(change):.1f}")
+    st.markdown("---")
 
 def render_risk_indicators(metrics: Dict[str, float], config: Dict[str, Any]) -> None:
     """Render risk indicator panel."""
