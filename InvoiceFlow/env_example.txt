@@ -1,23 +1,22 @@
-# OpenRouter API for AI Assistant
-OPENROUTER_API_KEY=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
+# Environment Variables Template
+# Copy this file to .env and fill in your actual values
+# NEVER commit your actual API keys to version control
 
-# Email API Configuration (Optional - for advanced email features)
-# Gmail API (Google Workspace)
-GMAIL_CLIENT_ID=your_gmail_client_id_here
-GMAIL_CLIENT_SECRET=your_gmail_client_secret_here
+# OpenRouter API Key (get from https://openrouter.ai/keys)
+OPENROUTER_API_KEY=your_openrouter_api_key_here
 
-# Outlook/Microsoft 365 API
-OUTLOOK_CLIENT_ID=your_outlook_client_id_here
-OUTLOOK_CLIENT_SECRET=your_outlook_client_secret_here
-OUTLOOK_TENANT_ID=your_outlook_tenant_id_here
+# OpenAI API Key (alternative)
+OPENAI_API_KEY=your_openai_api_key_here
 
-# SendGrid API (Alternative email service)
-SENDGRID_API_KEY=your_sendgrid_api_key_here
-SENDGRID_FROM_EMAIL=your_verified_sender_email_here
-
-# SMTP Configuration (Optional - for direct email sending)
-SMTP_HOST=smtp.gmail.com
+# Email Configuration (optional)
+SMTP_SERVER=smtp.gmail.com
 SMTP_PORT=587
-SMTP_USER=your_email@gmail.com
-SMTP_PASS=your_app_password_here
-FROM_EMAIL=your_email@gmail.com
+EMAIL_USERNAME=your_email@gmail.com
+EMAIL_PASSWORD=your_app_password
+
+# Database Configuration (optional)
+DATABASE_URL=your_database_url_here
+
+# Other Configuration
+DEBUG=False
+LOG_LEVEL=INFO
