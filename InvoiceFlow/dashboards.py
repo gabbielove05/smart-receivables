@@ -24,14 +24,43 @@ def render_cfo_panel(df: pd.DataFrame, config: Dict[str, Any]) -> None:
         # Calculate key metrics
         metrics = calculate_key_metrics(df)
         
-        # Generate AI executive summary
-        df_dict = {'merged': df.to_dict()}
-        executive_summary = generate_executive_summary(df_dict)
-        
-        # Top row - Executive Summary
-        st.markdown("#### 🎯 Executive Summary")
-        st.markdown("**📈 Financial Intelligence Brief**")
-        st.markdown(executive_summary)
+        # Generate AI executive summary using new AI client
+        st.subheader("🎯 Executive Summary")
+        with st.spinner("Generating summary…"):
+            try:
+                # Calculate key metrics for summary
+                ar_over_30 = len(df[df['days_overdue'] > 30]) if 'days_overdue' in df.columns else 0
+                dso = metrics['dso']
+                dso_target = 30
+                
+                # Get high risk accounts (overdue > 60 days)
+                high_risk = df[df['days_overdue'] > 60] if 'days_overdue' in df.columns else pd.DataFrame()
+                
+                # Get exceptions in last 24h (simplified)
+                exceptions_24h_list = df[df['status'] == 'exception'] if 'status' in df.columns else pd.DataFrame()
+                
+                kpis_text = f"""
+                AR>30d: {ar_over_30}
+                DSO: {dso}
+                High-risk accts: {len(high_risk)}
+                Exceptions (24h): {len(exceptions_24h_list)}
+                """
+                
+                from ai_client import call_ai
+                messages = [
+                    {"role": "system", "content": "You are a concise payments analyst for Treasury/Receivables."},
+                    {"role": "user", "content": f"Summarize risk, cash acceleration opportunities, and 2 concrete actions:\n{kpis_text}"}
+                ]
+                summary = call_ai(messages)
+                st.markdown(summary)
+            except Exception as e:
+                st.warning(f"AI summary unavailable — using fallback. ({e})")
+                bullets = []
+                if dso > dso_target: bullets.append(f"DSO {dso:.1f} vs target {dso_target:.1f}: escalate >30d collections.")
+                if len(exceptions_24h_list) > 0: bullets.append(f"{len(exceptions_24h_list)} exceptions in 24h: review top by amount.")
+                if len(high_risk) > 0: bullets.append(f"{len(high_risk)} high-risk accounts: tighten cadence / holds.")
+                if not bullets: bullets.append("No critical issues detected; maintain cadence.")
+                st.markdown("\n".join(f"- {b}" for b in bullets))
         
         # Key metrics cards
         col1, col2, col3, col4 = st.columns(4)

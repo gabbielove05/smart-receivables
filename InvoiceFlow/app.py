@@ -22,16 +22,7 @@ from ml_models import train_models, get_model_explanations
 from utils import normalize_data, generate_sample_data
 from email_utils import draft_email, send_email, FIXED_LINE
 
-# Debug: Check what secrets are available
-try:
-    st.write("🔍 **Debug Info:**")
-    st.write(f"OpenRouter API Key: {'✅ Found' if st.secrets.get('OPENROUTER_API_KEY') else '❌ Not Found'}")
-    st.write(f"OpenAI API Key: {'✅ Found' if st.secrets.get('OPENAI_API_KEY') else '❌ Not Found'}")
-    if st.secrets.get('OPENROUTER_API_KEY'):
-        key = st.secrets.get('OPENROUTER_API_KEY')
-        st.write(f"Key starts with: {key[:10]}...{key[-4:]}")
-except Exception as e:
-    st.write(f"Error checking secrets: {e}")
+
 
 # Configure logging
 logging.basicConfig(

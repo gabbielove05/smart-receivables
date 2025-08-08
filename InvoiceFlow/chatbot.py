@@ -162,13 +162,6 @@ def ask_llm(query: str, df_dict: Dict[str, Any]) -> str:
         AI-generated or FAQ response
     """
     try:
-        if not openai_client:
-            logger.info("LLM client unavailable, using FAQ fallback")
-            return (
-                f"🔧 **FAQ Mode**: {get_faq_response(query)}\n\n"
-                "💡 *Set OPENROUTER_API_KEY or OPENAI_API_KEY to enable AI-powered responses.*"
-            )
-        
         # Create context from data
         data_summary = create_data_summary(df_dict)
         
@@ -187,39 +180,19 @@ def ask_llm(query: str, df_dict: Dict[str, Any]) -> str:
         
         Provide a professional financial analysis with specific insights and recommendations where appropriate."""
         
-        # Using OpenRouter with smaller, cheaper models to avoid 402 errors
-        model_name = "openai/gpt-4o-mini" if base_url else "gpt-4o-mini"
+        from ai_client import call_ai
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ]
         
-        # Debug: Print API call details
-        print(f"Making API call to: {base_url or 'OpenAI'}")
-        print(f"Using model: {model_name}")
-        print(f"API key starts with: {api_key[:10]}...{api_key[-4:] if api_key else 'None'}")
-        
-        response = openai_client.chat.completions.create(
-            model=model_name,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt}
-            ],
-            max_tokens=300,  # Reduced from 1000
-            temperature=0.3
-        )
-        
-        ai_response = response.choices[0].message.content
+        ai_response = call_ai(messages, max_tokens=300, temperature=0.3)
         logger.info(f"Generated AI response for query: {query[:50]}...")
         
         return f"🤖 **AI Analysis**: {ai_response}"
         
     except Exception as e:
         logger.error(f"Error in ask_llm: {e}")
-        
-        # Check for specific 402 error (insufficient credits)
-        if "402" in str(e) or "Payment Required" in str(e):
-            return (
-                f"⚠️ **Token Limit Reached**: The AI request was too large for your current plan.\n\n"
-                f"💡 **FAQ Response**: {get_faq_response(query)}\n\n"
-                f"🔧 *Try asking a shorter question or contact support to increase your token limit.*"
-            )
         
         # Fallback to FAQ system
         faq_response = get_faq_response(query)
