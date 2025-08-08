@@ -1,0 +1,78 @@
+# 𝗣𝗿𝗼𝗷𝗲𝗰𝘁: JPMorgan Smart Receivables Navigator – full production build
+You are an expert Python engineer. Generate a complete, runnable Streamlit project that matches the spec below.
+
+────────────────────────────────────────────────
+1. TECH STACK & STRUCTURE
+────────────────────────────────────────────────
+- Python 3.11
+- Streamlit ≥ 1.35
+- openai, langchain, pandas, numpy, scikit-learn, matplotlib, python-dotenv, smtplib, email, requests, faker
+- Layout:
+
+  /app.py                       # entry point
+  /chatbot.py                   # LLM + FAQ router
+  /integrations.py              # SMTP + tel call utility
+  /dashboards.py                # KPI cockpit, heat map, what-if simulator
+  /smart_actions.py             # priority queue + automation center
+  /style.css                    # custom CSS (dark mode, JPM blue, gold accents)
+  /requirements.txt             # full deps
+  /README.md                    # run instructions
+
+────────────────────────────────────────────────
+2. CORE FEATURES (OLD + NEW)
+────────────────────────────────────────────────
+● **Data ingest**  
+  - Two file_uploaders for invoice.csv and payment.csv **or** auto-load from environment vars SNOWFLAKE_CONN / S3_BUCKET.  
+  - Pandas ETL normalizes on `invoice_id`.
+
+● **Dashboards**  
+  - **KPI cockpit** (DSO, unapplied-cash, hit-rate, aging waterfall).  
+  - **Exception root-cause heat map**.  
+  - **What-If simulator** with sliders (payment terms, discount %).  
+  - **Next-Best-Action queue**: Isolation Forest + GBM prediction → sorted table.  
+  - All charts respond to click selections (Streamlit AgGrid or Plotly).
+
+● **Chatbot 2.0**  
+  - `/chatbot.py` exposes `ask_llm(query:str, df_dict:dict)->str`.  
+  - Uses OpenAI GPT-4o for natural-language Q&A; falls back to hard-coded finance FAQs if LLM unavailable.  
+  - Form-based UI, no sidebar.
+
+● **UI / UX**  
+  - NO Streamlit sidebar.  
+  - Four-column configuration panel at top (file upload, alert thresholds, currency, Sim mode).  
+  - Full-width tab switcher: 60 px height, 18 px font; active tab color `#0066CC`.  
+  - Metric cards: white text, gradient backgrounds (#0066CC → #003366).  
+  - Smart-action cards: color-coded priority (red, gold, blue) + shadows.  
+  - Global CSS in `style.css` (import via st.markdown).
+
+● **Email & Call integration (must work on Replit)**  
+  - `.env` variables: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, FROM_EMAIL.  
+  - `send_email(to, subj, body)` in `integrations.py` uses smtplib + SSL.  
+  - If SMTP vars missing, fall back to `mailto:` draft link (`mailto:{to}?subject={subj}&body={body}`) so clicking still opens default client.  
+  - `call_client(phone:str)` returns `st.markdown(f"[📞 Call]("tel:{phone}")", unsafe_allow_html=True)`.
+
+● **Automation Center**  
+  - Renders **smart recommendations** at top (colored cards).  
+  - Buttons: “Send Email”, “Call Client”, “Push to Collections (POST /collections)” – use dummy endpoint.
+
+● **Packaging & Test Script**  
+  - `requirements.txt` incl. everything.  
+  - Post-generate shell command in README:  
+    ```bash
+    streamlit run app.py --server.headless true --server.port 8501
+    ```
+
+────────────────────────────────────────────────
+3. CODE QUALITY
+────────────────────────────────────────────────
+- Pass `flake8` and `black` defaults.  
+- Functions ≤ 60 lines; docstrings everywhere.  
+- Use environment variables for secrets; never hard-code keys.  
+- Unit tests optional but include a tiny `tests/test_etl.py` for sanity.
+
+────────────────────────────────────────────────
+4. DELIVERABLES
+────────────────────────────────────────────────
+Return the **entire directory tree**, with fully-commented source files, ready to git-push or run on Replit. Ensure that running `pip install -r requirements.txt && streamlit run app.py` launches without errors.
+
+# End of spec

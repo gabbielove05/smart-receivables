@@ -1,0 +1,16 @@
+invoice_id,customer_id,customer_name,amount,issue_date,due_date,status,contact_person,contact_email,contact_phone
+INV001,CUST001,Acme Corporation,15000.00,2024-01-15,2024-02-14,outstanding,John Smith,john.smith@acme.com,+1-555-0101
+INV002,CUST002,TechStart Inc,25000.00,2024-01-20,2024-02-19,paid,Sarah Johnson,sarah.j@techstart.com,+1-555-0102
+INV003,CUST001,Acme Corporation,8000.00,2024-02-01,2024-03-03,overdue,John Smith,john.smith@acme.com,+1-555-0101
+INV004,CUST003,Global Solutions,45000.00,2024-01-10,2024-02-09,paid,Mike Davis,mike.davis@globalsolutions.com,+1-555-0103
+INV005,CUST004,Innovation Labs,12000.00,2024-02-05,2024-03-07,outstanding,Lisa Chen,lisa.chen@innovationlabs.com,+1-555-0104
+INV006,CUST002,TechStart Inc,18000.00,2024-02-10,2024-03-12,outstanding,Sarah Johnson,sarah.j@techstart.com,+1-555-0102
+INV007,CUST005,DataFlow Systems,32000.00,2024-01-25,2024-02-24,overdue,Robert Wilson,robert.wilson@dataflow.com,+1-555-0105
+INV008,CUST003,Global Solutions,22000.00,2024-02-15,2024-03-17,outstanding,Mike Davis,mike.davis@globalsolutions.com,+1-555-0103
+INV009,CUST006,CloudTech Solutions,28000.00,2024-01-30,2024-02-29,paid,Emma Brown,emma.brown@cloudtech.com,+1-555-0106
+INV010,CUST004,Innovation Labs,15000.00,2024-02-20,2024-03-22,outstanding,Lisa Chen,lisa.chen@innovationlabs.com,+1-555-0104
+INV011,CUST007,NextGen Industries,38000.00,2024-01-05,2024-02-04,overdue,David Lee,david.lee@nextgen.com,+1-555-0107
+INV012,CUST005,DataFlow Systems,19000.00,2024-02-25,2024-03-27,outstanding,Robert Wilson,robert.wilson@dataflow.com,+1-555-0105
+INV013,CUST008,SmartCorp Ltd,26000.00,2024-01-12,2024-02-11,paid,Anna Garcia,anna.garcia@smartcorp.com,+1-555-0108
+INV014,CUST006,CloudTech Solutions,14000.00,2024-02-28,2024-03-30,outstanding,Emma Brown,emma.brown@cloudtech.com,+1-555-0106
+INV015,CUST007,NextGen Industries,21000.00,2024-02-08,2024-03-10,outstanding,David Lee,david.lee@nextgen.com,+1-555-0107

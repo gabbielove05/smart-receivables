@@ -1,0 +1,474 @@
+/* JPMorgan Smart Receivables Navigator - Custom Styles */
+/* JPM Brand Colors: Blue #0066CC, Dark Blue #003366, Gold #FFD700 */
+
+/* Global Styles - Light Mode */
+.stApp {
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
+/* Header Styling */
+.main-header {
+    background: linear-gradient(90deg, #0066CC 0%, #003366 100%);
+    color: white;
+    padding: 30px 0;
+    margin-bottom: 30px;
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+}
+
+.main-header h1 {
+    color: #FFFFFF !important;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.main-header .subtitle {
+    color: #FFD700;
+    font-size: 1.2rem;
+    text-align: center;
+    font-weight: 300;
+}
+
+/* Configuration Panel */
+.config-panel {
+    background-color: #F8F9FA;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #E1E5E9;
+    margin-bottom: 30px;
+}
+
+.config-panel h3 {
+    color: #0066CC;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Tab Navigation Styling */
+.stTabs [data-baseweb="tab-list"] {
+    height: 60px;
+    background: linear-gradient(90deg, #F0F2F6 0%, #E1E5E9 100%);
+    border-radius: 15px 15px 0 0;
+    border: 2px solid #E1E5E9;
+    gap: 0;
+    padding: 0;
+}
+
+.stTabs [data-baseweb="tab"] {
+    height: 60px;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 0 30px;
+    color: #666666;
+    background-color: transparent;
+    border: none;
+    border-radius: 15px 15px 0 0;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stTabs [data-baseweb="tab"]:hover {
+    background-color: rgba(0, 102, 204, 0.1);
+    color: #0066CC;
+}
+
+.stTabs [aria-selected="true"] {
+    background-color: #0066CC !important;
+    color: white !important;
+    box-shadow: 0 -3px 8px rgba(0, 102, 204, 0.3);
+    transform: translateY(-2px);
+}
+
+.stTabs [data-baseweb="tab-panel"] {
+    padding: 30px 20px;
+    background-color: white;
+    border-radius: 0 0 15px 15px;
+    border: 2px solid #E1E5E9;
+    border-top: none;
+    min-height: 600px;
+}
+
+/* Metric Cards */
+.metric-card {
+    background: linear-gradient(135deg, #0066CC 0%, #003366 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 102, 204, 0.25);
+    text-align: center;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 102, 204, 0.35);
+}
+
+.metric-card h4 {
+    margin: 0 0 15px 0;
+    color: #FFD700;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.metric-card h2 {
+    margin: 0 0 10px 0;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: white;
+}
+
+.metric-card p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 400;
+}
+
+.metric-change-positive {
+    color: #00FF88 !important;
+    font-weight: 600;
+}
+
+.metric-change-negative {
+    color: #FF6B6B !important;
+    font-weight: 600;
+}
+
+/* Smart Action Cards */
+.action-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-left: 5px solid;
+    transition: all 0.2s ease;
+}
+
+.action-card:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    transform: translateX(5px);
+}
+
+.action-card-critical {
+    border-left-color: #FF4B4B;
+    background: linear-gradient(90deg, rgba(255, 75, 75, 0.05) 0%, white 100%);
+}
+
+.action-card-high {
+    border-left-color: #FF8C00;
+    background: linear-gradient(90deg, rgba(255, 140, 0, 0.05) 0%, white 100%);
+}
+
+.action-card-medium {
+    border-left-color: #FFD700;
+    background: linear-gradient(90deg, rgba(255, 215, 0, 0.05) 0%, white 100%);
+}
+
+.action-card-low {
+    border-left-color: #90EE90;
+    background: linear-gradient(90deg, rgba(144, 238, 144, 0.05) 0%, white 100%);
+}
+
+.action-card h4 {
+    margin-top: 0;
+    font-weight: 600;
+}
+
+.action-card-critical h4 { color: #FF4B4B; }
+.action-card-high h4 { color: #FF8C00; }
+.action-card-medium h4 { color: #DAA520; }
+.action-card-low h4 { color: #228B22; }
+
+/* Buttons */
+.stButton > button {
+    background: linear-gradient(90deg, #0066CC 0%, #0052A3 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 102, 204, 0.3);
+}
+
+.stButton > button:hover {
+    background: linear-gradient(90deg, #0052A3 0%, #003366 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.4);
+}
+
+.stButton > button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 102, 204, 0.3);
+}
+
+/* Primary Button Styling */
+.stButton > button[kind="primary"] {
+    background: linear-gradient(90deg, #FFD700 0%, #DAA520 100%);
+    color: #003366;
+    font-weight: 700;
+}
+
+.stButton > button[kind="primary"]:hover {
+    background: linear-gradient(90deg, #DAA520 0%, #B8860B 100%);
+    color: white;
+}
+
+/* Secondary Button Styling */
+.stButton > button[kind="secondary"] {
+    background: transparent;
+    color: #0066CC;
+    border: 2px solid #0066CC;
+}
+
+.stButton > button[kind="secondary"]:hover {
+    background: #0066CC;
+    color: white;
+}
+
+/* Executive Summary Box */
+.executive-summary {
+    background: linear-gradient(135deg, #0066CC 0%, #003366 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    box-shadow: 0 6px 20px rgba(0, 102, 204, 0.25);
+    border: 2px solid rgba(255, 215, 0, 0.2);
+}
+
+.executive-summary h4 {
+    margin-top: 0;
+    color: #FFD700;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.executive-summary p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 0;
+    color: rgba(255, 255, 255, 0.95);
+}
+
+/* Data Quality Badge */
+.quality-badge {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+    color: white;
+}
+
+.quality-badge-high {
+    background: linear-gradient(90deg, #00C851 0%, #007E33 100%);
+}
+
+.quality-badge-medium {
+    background: linear-gradient(90deg, #FFD700 0%, #FF8F00 100%);
+    color: #003366;
+}
+
+.quality-badge-low {
+    background: linear-gradient(90deg, #FF4444 0%, #CC0000 100%);
+}
+
+/* Risk Indicators */
+.risk-indicator {
+    padding: 12px 18px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-weight: 500;
+    border-left: 4px solid;
+}
+
+.risk-high {
+    background-color: rgba(255, 75, 75, 0.1);
+    border-left-color: #FF4B4B;
+    color: #CC0000;
+}
+
+.risk-medium {
+    background-color: rgba(255, 140, 0, 0.1);
+    border-left-color: #FF8C00;
+    color: #E65100;
+}
+
+.risk-low {
+    background-color: rgba(76, 175, 80, 0.1);
+    border-left-color: #4CAF50;
+    color: #2E7D32;
+}
+
+/* Charts and Visualizations */
+.chart-container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #E1E5E9;
+    margin-bottom: 20px;
+}
+
+.chart-title {
+    color: #0066CC;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Sidebar Removal */
+.css-1d391kg, .css-1aumxhk {
+    display: none;
+}
+
+/* File Uploader Styling */
+.stFileUploader {
+    border: 2px dashed #0066CC;
+    border-radius: 10px;
+    padding: 20px;
+    background: rgba(0, 102, 204, 0.05);
+    transition: all 0.2s ease;
+}
+
+.stFileUploader:hover {
+    border-color: #003366;
+    background: rgba(0, 102, 204, 0.1);
+}
+
+/* Success/Error/Warning Messages */
+.stAlert {
+    border-radius: 8px;
+    border: none;
+    font-weight: 500;
+    padding: 15px 20px;
+}
+
+.stSuccess {
+    background: linear-gradient(90deg, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%);
+    border-left: 4px solid #4CAF50;
+    color: #2E7D32;
+}
+
+.stError {
+    background: linear-gradient(90deg, rgba(244, 67, 54, 0.1) 0%, rgba(244, 67, 54, 0.05) 100%);
+    border-left: 4px solid #F44336;
+    color: #C62828;
+}
+
+.stWarning {
+    background: linear-gradient(90deg, rgba(255, 152, 0, 0.1) 0%, rgba(255, 152, 0, 0.05) 100%);
+    border-left: 4px solid #FF9800;
+    color: #E65100;
+}
+
+.stInfo {
+    background: linear-gradient(90deg, rgba(0, 102, 204, 0.1) 0%, rgba(0, 102, 204, 0.05) 100%);
+    border-left: 4px solid #0066CC;
+    color: #003366;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .main-header h1 {
+        font-size: 2rem;
+    }
+    
+    .main-header .subtitle {
+        font-size: 1rem;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        font-size: 14px;
+        padding: 0 15px;
+    }
+    
+    .metric-card {
+        padding: 20px;
+    }
+    
+    .metric-card h2 {
+        font-size: 1.8rem;
+    }
+    
+    .executive-summary {
+        padding: 20px;
+    }
+    
+    .action-card {
+        padding: 15px;
+    }
+}
+
+/* iPad Specific Optimizations */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .stTabs [data-baseweb="tab"] {
+        font-size: 16px;
+        padding: 0 20px;
+    }
+    
+    .config-panel {
+        padding: 25px;
+    }
+}
+
+/* Loading Spinners */
+.stSpinner {
+    color: #0066CC !important;
+}
+
+/* Progress Bars */
+.stProgress > div > div > div > div {
+    background: linear-gradient(90deg, #0066CC 0%, #FFD700 100%);
+}
+
+/* Expander Styling */
+.streamlit-expanderHeader {
+    background: linear-gradient(90deg, rgba(0, 102, 204, 0.05) 0%, rgba(0, 102, 204, 0.02) 100%);
+    border: 1px solid rgba(0, 102, 204, 0.2);
+    border-radius: 8px;
+    color: #0066CC;
+    font-weight: 600;
+}
+
+.streamlit-expanderContent {
+    border: 1px solid rgba(0, 102, 204, 0.1);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    background: rgba(248, 249, 250, 0.5);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #F0F2F6;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, #0066CC 0%, #003366 100%);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(90deg, #003366 0%, #001f3f 100%);
+}
