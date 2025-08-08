@@ -45,19 +45,19 @@ st.set_page_config(
 # Dark mode configuration
 st.markdown("""
 <style>
-    /* Dark mode styling */
-    .main {
-        background-color: #0e1117;
-        color: #fafafa;
-    }
-    
+    /* Force black background everywhere */
     .stApp {
-        background-color: #0e1117;
+        background-color: #000000 !important;
     }
     
-    /* Text visibility improvements */
-    .stMarkdown, .stText, .stSelectbox, .stTextInput, .stTextArea {
-        color: #fafafa !important;
+    .main {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+    }
+    
+    /* Make all text white */
+    .stMarkdown, .stText, .stSelectbox, .stTextInput, .stTextArea, p, div, span, label {
+        color: #ffffff !important;
     }
     
     /* Header styling */
@@ -65,34 +65,42 @@ st.markdown("""
         color: #ffffff !important;
     }
     
-    /* Metric styling */
-    .metric-container {
-        background-color: #1e1e1e;
-        border-radius: 8px;
-        padding: 16px;
-        margin: 8px 0;
+    /* Input fields styling */
+    .stTextInput > div > div > input {
+        background-color: #1a1a1a !important;
+        color: #ffffff !important;
+        border: 1px solid #333333 !important;
     }
     
-    /* Tab styling for dark mode */
-    .stTabs [data-baseweb="tab-list"] {
-        background-color: #1e1e1e !important;
-        border-radius: 10px 10px 0 0;
+    .stSelectbox > div > div > div {
+        background-color: #1a1a1a !important;
+        color: #ffffff !important;
     }
     
-    .stTabs [data-baseweb="tab"] {
-        color: #cccccc !important;
-        background-color: #2d2d2d !important;
+    .stTextArea > div > div > textarea {
+        background-color: #1a1a1a !important;
+        color: #ffffff !important;
+        border: 1px solid #333333 !important;
     }
     
-    .stTabs [aria-selected="true"] {
-        background-color: #0066CC !important;
-        color: white !important;
+    /* Number input styling */
+    .stNumberInput > div > div > input {
+        background-color: #1a1a1a !important;
+        color: #ffffff !important;
+        border: 1px solid #333333 !important;
     }
     
-    /* Dataframe styling */
-    .dataframe {
-        background-color: #1e1e1e !important;
-        color: #fafafa !important;
+    /* Checkbox styling */
+    .stCheckbox > div > div {
+        background-color: #1a1a1a !important;
+        color: #ffffff !important;
+    }
+    
+    /* File uploader styling */
+    .stFileUploader {
+        background-color: #1a1a1a !important;
+        border: 2px dashed #333333 !important;
+        color: #ffffff !important;
     }
     
     /* Button styling */
@@ -127,22 +135,67 @@ st.markdown("""
         color: #60a5fa !important;
     }
     
-    /* File uploader styling */
-    .stFileUploader {
-        background-color: #1e1e1e !important;
-        border: 2px dashed #4a4a4a !important;
+    /* Tab styling for dark mode */
+    .stTabs [data-baseweb="tab-list"] {
+        background-color: #1a1a1a !important;
+        border-radius: 10px 10px 0 0;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        color: #ffffff !important;
+        background-color: #2a2a2a !important;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background-color: #0066CC !important;
+        color: white !important;
+    }
+    
+    /* Dataframe styling */
+    .dataframe {
+        background-color: #1a1a1a !important;
+        color: #ffffff !important;
     }
     
     /* Expander styling */
     .streamlit-expanderHeader {
-        background-color: #1e1e1e !important;
-        color: #fafafa !important;
+        background-color: #1a1a1a !important;
+        color: #ffffff !important;
     }
     
     /* Code block styling */
     .stCodeBlock {
-        background-color: #2d2d2d !important;
-        color: #fafafa !important;
+        background-color: #1a1a1a !important;
+        color: #ffffff !important;
+    }
+    
+    /* Metric styling */
+    .metric-container {
+        background-color: #1a1a1a;
+        border-radius: 8px;
+        padding: 16px;
+        margin: 8px 0;
+    }
+    
+    /* Override any white backgrounds */
+    * {
+        background-color: #000000 !important;
+    }
+    
+    /* Ensure text is always white */
+    * {
+        color: #ffffff !important;
+    }
+    
+    /* Specific overrides for better visibility */
+    .stMarkdown > div {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+    }
+    
+    .stText > div {
+        background-color: #000000 !important;
+        color: #ffffff !important;
     }
 </style>
 """, unsafe_allow_html=True)
