@@ -24,14 +24,11 @@ from email_utils import draft_email, send_email, FIXED_LINE
 
 # Test API key loading
 try:
-    from ai_client import _get_secret
-    api_key = _get_secret("OPENROUTER_API_KEY")
-    if api_key:
-        st.sidebar.success("✅ AI API Key Loaded")
-    else:
-        st.sidebar.error("❌ AI API Key Missing")
+    from ai_client import get_client
+    client = get_client()
+    st.sidebar.success("✅ AI API Key Loaded")
 except Exception as e:
-    st.sidebar.warning(f"⚠️ API Key Error: {e}")
+    st.sidebar.error(f"❌ AI API Key Error: {e}")
 
 # Add API test button to sidebar
 if st.sidebar.button("🧪 Test API Call"):
