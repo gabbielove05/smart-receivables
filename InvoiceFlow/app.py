@@ -225,7 +225,7 @@ def render_smart_actions(invoices_df, payments_df):
                 
         except Exception as e:
             st.error(f"❌ Error generating recommendations: {str(e)}")
-                    else:
+    else:
         st.info("⚡ Smart actions feature is being loaded. Please check the configuration.")
 
 
