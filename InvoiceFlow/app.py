@@ -22,6 +22,16 @@ from ml_models import train_models, get_model_explanations
 from utils import normalize_data, generate_sample_data
 from email_utils import draft_email, send_email, FIXED_LINE
 
+# Test API key loading
+try:
+    from ai_client import _get_secret
+    api_key = _get_secret("OPENROUTER_API_KEY")
+    if api_key:
+        st.sidebar.success("✅ AI API Key Loaded")
+    else:
+        st.sidebar.error("❌ AI API Key Missing")
+except Exception as e:
+    st.sidebar.warning(f"⚠️ API Key Error: {e}")
 
 
 # Configure logging

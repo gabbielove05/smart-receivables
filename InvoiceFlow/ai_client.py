@@ -5,8 +5,14 @@ OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 def _get_secret(name, default=None):
     try:
         import streamlit as st
-        return st.secrets.get(name, os.environ.get(name, default))
-    except Exception:
+        value = st.secrets.get(name, os.environ.get(name, default))
+        if name == "OPENROUTER_API_KEY" and value:
+            print(f"✅ Found {name}: {value[:10]}...{value[-4:]}")
+        elif name == "OPENROUTER_API_KEY" and not value:
+            print(f"❌ {name} not found in secrets or environment")
+        return value
+    except Exception as e:
+        print(f"⚠️ Error getting {name}: {e}")
         return os.environ.get(name, default)
 
 def call_ai(messages, model="openrouter/auto", max_tokens=700, temperature=0.2, retries=2, timeout=30):
