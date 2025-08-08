@@ -14,47 +14,14 @@ import os
 
 logger = logging.getLogger(__name__)
 
+# CSS loading disabled - using default Streamlit styling
 def load_css() -> None:
-    """Load custom CSS styles for the application."""
-    try:
-        css_file_path = os.path.join(os.path.dirname(__file__), 'style.css')
-        
-        if os.path.exists(css_file_path):
-            with open(css_file_path, 'r', encoding='utf-8') as f:
-                css_content = f.read()
-                st.markdown(f'<style>{css_content}</style>', unsafe_allow_html=True)
-            logger.info("Custom CSS loaded successfully")
-        else:
-            logger.warning(f"CSS file not found at {css_file_path}")
-            # Load basic inline CSS as fallback
-            load_fallback_css()
-    except Exception as e:
-        logger.error(f"Error loading CSS: {e}")
-        load_fallback_css()
+    """CSS loading disabled - using default Streamlit styling."""
+    pass
 
 def load_fallback_css() -> None:
-    """Load minimal fallback CSS when main CSS file is unavailable."""
-    fallback_css = """
-    <style>
-    .stApp {
-        background-color: #FFFFFF;
-    }
-    .metric-card {
-        background: linear-gradient(135deg, #0066CC 0%, #003366 100%);
-        color: white;
-        padding: 20px;
-        border-radius: 10px;
-        text-align: center;
-        margin-bottom: 15px;
-    }
-    .stTabs [aria-selected="true"] {
-        background-color: #0066CC !important;
-        color: white !important;
-    }
-    </style>
-    """
-    st.markdown(fallback_css, unsafe_allow_html=True)
-    logger.info("Fallback CSS loaded")
+    """CSS loading disabled - using default Streamlit styling."""
+    pass
 
 def normalize_data(invoices_df: pd.DataFrame, payments_df: pd.DataFrame) -> pd.DataFrame:
     """
