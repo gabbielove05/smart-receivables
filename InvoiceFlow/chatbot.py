@@ -25,7 +25,20 @@ import streamlit as st
 try:
     _router_key = st.secrets.get("OPENROUTER_API_KEY") or os.getenv("OPENROUTER_API_KEY")
     _openai_key = st.secrets.get("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY")
-except Exception:
+    
+    # Debug: Print what keys we found (without showing full key)
+    if _router_key:
+        print(f"Found OpenRouter key: {_router_key[:10]}...{_router_key[-4:]}")
+    else:
+        print("No OpenRouter key found")
+        
+    if _openai_key:
+        print(f"Found OpenAI key: {_openai_key[:10]}...{_openai_key[-4:]}")
+    else:
+        print("No OpenAI key found")
+        
+except Exception as e:
+    print(f"Error getting secrets: {e}")
     _router_key = os.getenv("OPENROUTER_API_KEY")
     _openai_key = os.getenv("OPENAI_API_KEY")
 
@@ -176,6 +189,12 @@ def ask_llm(query: str, df_dict: Dict[str, Any]) -> str:
         
         # Using OpenRouter with smaller, cheaper models to avoid 402 errors
         model_name = "openai/gpt-4o-mini" if base_url else "gpt-4o-mini"
+        
+        # Debug: Print API call details
+        print(f"Making API call to: {base_url or 'OpenAI'}")
+        print(f"Using model: {model_name}")
+        print(f"API key starts with: {api_key[:10]}...{api_key[-4:] if api_key else 'None'}")
+        
         response = openai_client.chat.completions.create(
             model=model_name,
             messages=[
