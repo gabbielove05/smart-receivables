@@ -34,8 +34,118 @@ st.set_page_config(
     page_title="JPMorgan Smart Receivables Navigator",
     page_icon="🏦",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="collapsed",
+    menu_items={
+        'Get Help': None,
+        'Report a bug': None,
+        'About': 'JPMorgan Smart Receivables Navigator - AI-Powered Financial Intelligence Platform'
+    }
 )
+
+# Dark mode configuration
+st.markdown("""
+<style>
+    /* Dark mode styling */
+    .main {
+        background-color: #0e1117;
+        color: #fafafa;
+    }
+    
+    .stApp {
+        background-color: #0e1117;
+    }
+    
+    /* Text visibility improvements */
+    .stMarkdown, .stText, .stSelectbox, .stTextInput, .stTextArea {
+        color: #fafafa !important;
+    }
+    
+    /* Header styling */
+    h1, h2, h3, h4, h5, h6 {
+        color: #ffffff !important;
+    }
+    
+    /* Metric styling */
+    .metric-container {
+        background-color: #1e1e1e;
+        border-radius: 8px;
+        padding: 16px;
+        margin: 8px 0;
+    }
+    
+    /* Tab styling for dark mode */
+    .stTabs [data-baseweb="tab-list"] {
+        background-color: #1e1e1e !important;
+        border-radius: 10px 10px 0 0;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        color: #cccccc !important;
+        background-color: #2d2d2d !important;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background-color: #0066CC !important;
+        color: white !important;
+    }
+    
+    /* Dataframe styling */
+    .dataframe {
+        background-color: #1e1e1e !important;
+        color: #fafafa !important;
+    }
+    
+    /* Button styling */
+    .stButton > button {
+        background-color: #0066CC !important;
+        color: white !important;
+        border: none !important;
+    }
+    
+    .stButton > button:hover {
+        background-color: #0052a3 !important;
+    }
+    
+    /* Success/Error message styling */
+    .stSuccess {
+        background-color: #1e3a1e !important;
+        color: #4ade80 !important;
+    }
+    
+    .stError {
+        background-color: #3a1e1e !important;
+        color: #f87171 !important;
+    }
+    
+    .stWarning {
+        background-color: #3a2e1e !important;
+        color: #fbbf24 !important;
+    }
+    
+    .stInfo {
+        background-color: #1e2e3a !important;
+        color: #60a5fa !important;
+    }
+    
+    /* File uploader styling */
+    .stFileUploader {
+        background-color: #1e1e1e !important;
+        border: 2px dashed #4a4a4a !important;
+    }
+    
+    /* Expander styling */
+    .streamlit-expanderHeader {
+        background-color: #1e1e1e !important;
+        color: #fafafa !important;
+    }
+    
+    /* Code block styling */
+    .stCodeBlock {
+        background-color: #2d2d2d !important;
+        color: #fafafa !important;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 def check_environment_variables():
     """Check for required environment variables and display warnings."""
@@ -206,10 +316,10 @@ def main():
     # Header
     st.markdown("""
         <div style='text-align: center; padding: 20px 0;'>
-            <h1 style='color: #0066CC; font-size: 2.5rem; margin-bottom: 0;'>
+            <h1 style='color: #ffffff; font-size: 2.5rem; margin-bottom: 0; text-shadow: 0 0 10px #0066CC;'>
                 🏦 JPMorgan Smart Receivables Navigator
             </h1>
-            <p style='color: #666; font-size: 1.1rem; margin-top: 5px;'>
+            <p style='color: #cccccc; font-size: 1.1rem; margin-top: 5px;'>
                 AI-Powered Financial Intelligence Platform
             </p>
         </div>
@@ -415,8 +525,8 @@ def main():
         # Empty state with helpful information
         st.markdown("""
             <div style='text-align: center; padding: 60px 20px;'>
-                <h3 style='color: #666;'>📤 No Data Loaded</h3>
-                <p style='color: #888; font-size: 1.1rem;'>
+                <h3 style='color: #cccccc;'>📤 No Data Loaded</h3>
+                <p style='color: #aaaaaa; font-size: 1.1rem;'>
                     Upload your invoice and payment CSV files to start analyzing your receivables.
                 </p>
             </div>
