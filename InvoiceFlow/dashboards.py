@@ -46,12 +46,12 @@ def render_cfo_panel(df: pd.DataFrame, config: Dict[str, Any]) -> None:
                 Exceptions (24h): {len(exceptions_24h_list)}
                 """
                 
-                from ai_client import call_ai
+                from ai_client import chat
                 messages = [
                     {"role": "system", "content": "You are a concise payments analyst for Treasury/Receivables."},
                     {"role": "user", "content": f"Summarize risk, cash acceleration opportunities, and 2 concrete actions:\n{kpis_text}"}
                 ]
-                summary = call_ai(messages)
+                summary = chat(messages)  # model defaults to "openai/gpt-4o"
                 st.markdown(summary)
             except Exception as e:
                 st.warning(f"AI summary unavailable — using fallback. ({e})")

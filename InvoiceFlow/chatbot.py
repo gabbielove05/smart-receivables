@@ -180,13 +180,13 @@ def ask_llm(query: str, df_dict: Dict[str, Any]) -> str:
         
         Provide a professional financial analysis with specific insights and recommendations where appropriate."""
         
-        from ai_client import call_ai
+        from ai_client import chat
         messages = [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}
         ]
         
-        ai_response = call_ai(messages, max_tokens=300, temperature=0.3)
+        ai_response = chat(messages, max_tokens=300, temperature=0.3)
         logger.info(f"Generated AI response for query: {query[:50]}...")
         
         return f"🤖 **AI Analysis**: {ai_response}"
