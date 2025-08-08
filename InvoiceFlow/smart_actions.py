@@ -469,11 +469,11 @@ def render_action_queue(actions: List[Dict[str, Any]]) -> None:
                                     <h4 style='margin-top: 0; color: {urgency_color};'>
                                         {action['urgency']} Priority - Score: {action['priority_score']:.0f}
                                     </h4>
-                                    <p><strong>Customer:</strong> {action['contact_info'].get('customer_name', action['customer_id'])}</p>
-                                    <p><strong>Amount:</strong> ${action['amount']:,.2f}</p>
-                                    <p><strong>Days Overdue:</strong> {action['days_overdue']}</p>
-                                    <p><strong>Action:</strong> {action['recommended_action']}</p>
-                                    <p><strong>Expected Outcome:</strong> {action['expected_outcome']}</p>
+                                    <p style='color: black;'><strong>Customer:</strong> {action['contact_info'].get('customer_name', action['customer_id'])}</p>
+                                    <p style='color: black;'><strong>Amount:</strong> ${action['amount']:,.2f}</p>
+                                    <p style='color: black;'><strong>Days Overdue:</strong> {action['days_overdue']}</p>
+                                    <p style='color: black;'><strong>Action:</strong> {action['recommended_action']}</p>
+                                    <p style='color: black;'><strong>Expected Outcome:</strong> {action['expected_outcome']}</p>
                                 </div>
                                 """, unsafe_allow_html=True)
                                 

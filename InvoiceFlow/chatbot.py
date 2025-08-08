@@ -19,8 +19,15 @@ except Exception:
 logger = logging.getLogger(__name__)
 
 # Initialize client (supports OpenRouter or OpenAI)
-_router_key = os.getenv("OPENROUTER_API_KEY")
-_openai_key = os.getenv("OPENAI_API_KEY")
+import streamlit as st
+
+# Try to get API keys from Streamlit secrets first, then environment variables
+try:
+    _router_key = st.secrets.get("OPENROUTER_API_KEY") or os.getenv("OPENROUTER_API_KEY")
+    _openai_key = st.secrets.get("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY")
+except Exception:
+    _router_key = os.getenv("OPENROUTER_API_KEY")
+    _openai_key = os.getenv("OPENAI_API_KEY")
 
 api_key = None
 base_url = None
