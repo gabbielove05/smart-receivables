@@ -42,65 +42,22 @@ st.set_page_config(
     }
 )
 
-# Dark mode configuration
+# Light mode with AI functionality
 st.markdown("""
 <style>
-    /* Force black background everywhere */
+    /* Professional light theme with JPMorgan branding */
     .stApp {
-        background-color: #000000 !important;
+        background-color: #ffffff;
     }
     
     .main {
-        background-color: #000000 !important;
-        color: #ffffff !important;
-    }
-    
-    /* Make all text white */
-    .stMarkdown, .stText, .stSelectbox, .stTextInput, .stTextArea, p, div, span, label {
-        color: #ffffff !important;
+        background-color: #ffffff;
+        color: #262730;
     }
     
     /* Header styling */
     h1, h2, h3, h4, h5, h6 {
-        color: #ffffff !important;
-    }
-    
-    /* Input fields styling */
-    .stTextInput > div > div > input {
-        background-color: #1a1a1a !important;
-        color: #ffffff !important;
-        border: 1px solid #333333 !important;
-    }
-    
-    .stSelectbox > div > div > div {
-        background-color: #1a1a1a !important;
-        color: #ffffff !important;
-    }
-    
-    .stTextArea > div > div > textarea {
-        background-color: #1a1a1a !important;
-        color: #ffffff !important;
-        border: 1px solid #333333 !important;
-    }
-    
-    /* Number input styling */
-    .stNumberInput > div > div > input {
-        background-color: #1a1a1a !important;
-        color: #ffffff !important;
-        border: 1px solid #333333 !important;
-    }
-    
-    /* Checkbox styling */
-    .stCheckbox > div > div {
-        background-color: #1a1a1a !important;
-        color: #ffffff !important;
-    }
-    
-    /* File uploader styling */
-    .stFileUploader {
-        background-color: #1a1a1a !important;
-        border: 2px dashed #333333 !important;
-        color: #ffffff !important;
+        color: #0066CC !important;
     }
     
     /* Button styling */
@@ -116,34 +73,38 @@ st.markdown("""
     
     /* Success/Error message styling */
     .stSuccess {
-        background-color: #1e3a1e !important;
-        color: #4ade80 !important;
+        background-color: #d4edda !important;
+        color: #155724 !important;
+        border: 1px solid #c3e6cb !important;
     }
     
     .stError {
-        background-color: #3a1e1e !important;
-        color: #f87171 !important;
+        background-color: #f8d7da !important;
+        color: #721c24 !important;
+        border: 1px solid #f5c6cb !important;
     }
     
     .stWarning {
-        background-color: #3a2e1e !important;
-        color: #fbbf24 !important;
+        background-color: #fff3cd !important;
+        color: #856404 !important;
+        border: 1px solid #ffeaa7 !important;
     }
     
     .stInfo {
-        background-color: #1e2e3a !important;
-        color: #60a5fa !important;
+        background-color: #d1ecf1 !important;
+        color: #0c5460 !important;
+        border: 1px solid #bee5eb !important;
     }
     
-    /* Tab styling for dark mode */
+    /* Tab styling */
     .stTabs [data-baseweb="tab-list"] {
-        background-color: #1a1a1a !important;
+        background-color: #f8f9fa;
         border-radius: 10px 10px 0 0;
     }
     
     .stTabs [data-baseweb="tab"] {
-        color: #ffffff !important;
-        background-color: #2a2a2a !important;
+        color: #6c757d;
+        background-color: #e9ecef;
     }
     
     .stTabs [aria-selected="true"] {
@@ -151,51 +112,43 @@ st.markdown("""
         color: white !important;
     }
     
+    /* Metric styling */
+    .metric-container {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 16px;
+        margin: 8px 0;
+        border: 1px solid #dee2e6;
+    }
+    
+    /* Professional styling for better readability */
+    .stMarkdown, .stText, .stSelectbox, .stTextInput, .stTextArea {
+        color: #262730 !important;
+    }
+    
+    /* File uploader styling */
+    .stFileUploader {
+        background-color: #f8f9fa !important;
+        border: 2px dashed #dee2e6 !important;
+        color: #6c757d !important;
+    }
+    
     /* Dataframe styling */
     .dataframe {
-        background-color: #1a1a1a !important;
-        color: #ffffff !important;
+        background-color: #ffffff !important;
+        color: #262730 !important;
     }
     
     /* Expander styling */
     .streamlit-expanderHeader {
-        background-color: #1a1a1a !important;
-        color: #ffffff !important;
+        background-color: #f8f9fa !important;
+        color: #262730 !important;
     }
     
     /* Code block styling */
     .stCodeBlock {
-        background-color: #1a1a1a !important;
-        color: #ffffff !important;
-    }
-    
-    /* Metric styling */
-    .metric-container {
-        background-color: #1a1a1a;
-        border-radius: 8px;
-        padding: 16px;
-        margin: 8px 0;
-    }
-    
-    /* Override any white backgrounds */
-    * {
-        background-color: #000000 !important;
-    }
-    
-    /* Ensure text is always white */
-    * {
-        color: #ffffff !important;
-    }
-    
-    /* Specific overrides for better visibility */
-    .stMarkdown > div {
-        background-color: #000000 !important;
-        color: #ffffff !important;
-    }
-    
-    .stText > div {
-        background-color: #000000 !important;
-        color: #ffffff !important;
+        background-color: #f8f9fa !important;
+        color: #262730 !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -369,10 +322,10 @@ def main():
     # Header
     st.markdown("""
         <div style='text-align: center; padding: 20px 0;'>
-            <h1 style='color: #ffffff; font-size: 2.5rem; margin-bottom: 0; text-shadow: 0 0 10px #0066CC;'>
+            <h1 style='color: #0066CC; font-size: 2.5rem; margin-bottom: 0; font-weight: bold;'>
                 🏦 JPMorgan Smart Receivables Navigator
             </h1>
-            <p style='color: #cccccc; font-size: 1.1rem; margin-top: 5px;'>
+            <p style='color: #666666; font-size: 1.1rem; margin-top: 5px;'>
                 AI-Powered Financial Intelligence Platform
             </p>
         </div>
