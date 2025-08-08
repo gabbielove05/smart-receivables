@@ -5,19 +5,7 @@ A comprehensive financial dashboard for receivables management with AI-powered i
 
 import streamlit as st
 import pandas as pd
-import numpy as np
-import logging
 import os
-from datetime import datetime, timedelta
-import json
-import time
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
 
 # Page configuration
 st.set_page_config(
@@ -27,400 +15,129 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Simple test to ensure app starts
-st.title("🏦 JPMorgan Smart Receivables Navigator")
-st.markdown("---")
-
-# Try to import custom modules with error handling
-try:
-    from chatbot import ask_llm
-    from integrations import call_client, send_teams_alert
-    from dashboards import render_cfo_panel, render_kpi_dashboard, render_heatmap, render_what_if_simulator
-    from smart_actions import generate_next_best_actions, render_automation_center
-    from data_quality import validate_data_quality, get_quality_score
-    from ml_models import train_models, get_model_explanations
-    from utils import load_css, normalize_data, generate_sample_data
-    from email_utils import draft_email, send_email, FIXED_LINE
-    st.success("✅ All modules imported successfully!")
-except ImportError as e:
-    st.error(f"❌ Import error: {e}")
-    st.info("Some features may not be available. Please check the logs for details.")
-
-def check_environment_variables():
-    """Check for required environment variables and display warnings."""
-    # OpenRouter API is configured by default, no required vars
-    required_vars = {}
+# Main app
+def main():
+    st.title("🏦 JPMorgan Smart Receivables Navigator")
+    st.markdown("---")
     
-    missing_required = []
+    # User information at the top
+    st.markdown("### 👤 User Information")
+    col1, col2 = st.columns(2)
     
-    for var, description in required_vars.items():
-        if not os.getenv(var):
-            missing_required.append(f"{var}: {description}")
+    with col1:
+        user_name = st.text_input(
+            "Your name:", 
+            placeholder="John Smith",
+            key="user_name_input",
+            value=st.session_state.get("user_name", "")
+        )
     
-    if missing_required:
-        st.error(f"❌ Missing required environment variables:\n" + "\n".join([f"• {var}" for var in missing_required]))
-        st.info("Please set these environment variables for full functionality.")
-
-def load_data():
-    """Load and process invoice and payment data."""
-    try:
-        # Check for environment-based data sources first
-        snowflake_conn = os.getenv('SNOWFLAKE_CONN')
-        s3_bucket = os.getenv('S3_BUCKET')
-        
-        if snowflake_conn or s3_bucket:
-            st.info("🔗 Environment data sources detected but not implemented in this demo. Please upload CSV files.")
-        
-        # User information at the top
-        st.markdown("### 👤 User Information")
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            user_name = st.text_input(
-                "Your name:", 
-                placeholder="John Smith",
-                key="user_name_input",
-                value=st.session_state.get("user_name", "")
-            )
-        
-        with col2:
-            user_email = st.text_input(
-                "Your email address:", 
-                placeholder="john.smith@company.com",
-                key="user_email_input",
-                value=st.session_state.get("recipient", "")
-            )
-        
-        # Save user info
-        if st.button("💾 Save Information", key="save_user_info"):
-            if user_name and user_email and "@" in user_email:
-                st.session_state["user_name"] = user_name
-                st.session_state["recipient"] = user_email
-                st.success(f"✅ Information saved: {user_name} ({user_email})")
-                st.rerun()
-            else:
-                st.error("Please enter both name and a valid email address")
-        
-        # Show current info if set
-        if st.session_state.get("user_name") and st.session_state.get("recipient"):
-            st.info(f"👤 Logged in as: {st.session_state['user_name']} ({st.session_state['recipient']})")
-        
-        st.markdown("---")
-        
-        # File uploaders
-        st.markdown("### 📁 Upload Data")
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            invoice_file = st.file_uploader(
-                "📋 Upload Invoice Data",
-                type=['csv'],
-                help="CSV file with invoice data including invoice_id, amount, due_date, customer_id"
-            )
-            
-        with col2:
-            payment_file = st.file_uploader(
-                "💰 Upload Payment Data", 
-                type=['csv'],
-                help="CSV file with payment data including payment_id, invoice_id, amount, payment_date"
-            )
-        
-        invoices_df = None
-        payments_df = None
-        
-        if invoice_file is not None:
-            try:
-                invoices_df = pd.read_csv(invoice_file)
-                st.success(f"✅ Loaded {len(invoices_df)} invoice records")
-                logger.info(f"Loaded invoice data: {len(invoices_df)} records")
-            except Exception as e:
-                st.error(f"❌ Error loading invoice data: {str(e)}")
-                logger.error(f"Invoice data loading error: {e}")
-        
-        if payment_file is not None:
-            try:
-                payments_df = pd.read_csv(payment_file)
-                st.success(f"✅ Loaded {len(payments_df)} payment records")
-                logger.info(f"Loaded payment data: {len(payments_df)} records")
-            except Exception as e:
-                st.error(f"❌ Error loading payment data: {str(e)}")
-                logger.error(f"Payment data loading error: {e}")
-        
-        # If no files uploaded, show empty state
-        if invoices_df is None and payments_df is None:
-            st.warning("📤 Please upload invoice and payment CSV files to begin analysis.")
-            st.info("💡 **Expected CSV format:**\n"
-                   "• **Invoices**: invoice_id, customer_id, amount, issue_date, due_date, status\n"
-                   "• **Payments**: payment_id, invoice_id, amount, payment_date, method")
-            return None, None, None
-            
-        # Normalize and merge data if both files are present
-        if invoices_df is not None and payments_df is not None:
-            try:
-                merged_df = normalize_data(invoices_df, payments_df)
-                logger.info(f"Successfully normalized and merged data: {len(merged_df)} records")
-                return invoices_df, payments_df, merged_df
-            except Exception as e:
-                st.error(f"❌ Error processing data: {str(e)}")
-                logger.error(f"Data processing error: {e}")
-                return invoices_df, payments_df, None
-        
-        return invoices_df, payments_df, None
-        
-    except Exception as e:
-        st.error(f"❌ Critical error in data loading: {str(e)}")
-        logger.error(f"Critical data loading error: {e}")
-        return None, None, None
-
-def render_configuration_panel():
-    """Render the simplified configuration panel."""
-    st.markdown("### ⚙️ Configuration Panel")
+    with col2:
+        user_email = st.text_input(
+            "Your email address:", 
+            placeholder="john.smith@company.com",
+            key="user_email_input",
+            value=st.session_state.get("recipient", "")
+        )
+    
+    # Save user info
+    if st.button("💾 Save Information", key="save_user_info"):
+        if user_name and user_email and "@" in user_email:
+            st.session_state["user_name"] = user_name
+            st.session_state["recipient"] = user_email
+            st.success(f"✅ Information saved: {user_name} ({user_email})")
+            st.rerun()
+        else:
+            st.error("Please enter both name and a valid email address")
+    
+    # Show current info if set
+    if st.session_state.get("user_name") and st.session_state.get("recipient"):
+        st.info(f"👤 Logged in as: {st.session_state['user_name']} ({st.session_state['recipient']})")
+    
+    st.markdown("---")
+    
+    # File upload section
+    st.markdown("### 📁 Upload Your Data")
+    st.markdown("Upload your invoice and payment CSV files to get started.")
     
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("**📊 Data Quality**")
-        # This will be populated by the data quality module
-        if 'quality_score' in st.session_state:
-            score = st.session_state.quality_score
-            color = "green" if score > 0.8 else "orange" if score > 0.6 else "red"
-            st.markdown(f"<div style='background-color: {color}; color: white; padding: 5px; border-radius: 3px; text-align: center;'>{score:.1%} Quality</div>", unsafe_allow_html=True)
-        else:
-            st.markdown("<div style='background-color: gray; color: white; padding: 5px; border-radius: 3px; text-align: center;'>No Data</div>", unsafe_allow_html=True)
-        
-        auto_refresh = st.checkbox("Auto-refresh (30s)", value=False, key="auto_refresh")
+        uploaded_invoices = st.file_uploader(
+            "Upload Invoice CSV",
+            type=['csv'],
+            help="Upload a CSV file with invoice data"
+        )
     
     with col2:
-        st.markdown("**⚙️ System Settings**")
-        date_range = st.selectbox("Analysis Period", ["Last 30 Days", "Last 90 Days", "Last 12 Months", "All Time"], index=1, key="date_range")
-        batch_size = st.number_input("Batch Action Size", min_value=1, max_value=50, value=10, key="batch_size")
+        uploaded_payments = st.file_uploader(
+            "Upload Payment CSV", 
+            type=['csv'],
+            help="Upload a CSV file with payment data"
+        )
     
-    return {
-        'auto_refresh': auto_refresh,
-        'date_range': date_range,
-        'batch_size': batch_size,
-        # Default values for removed configurations
-        'dso_threshold': 45,
-        'overdue_threshold': 50000,
-        'currency': 'USD',
-        'date_format': 'MM/DD/YYYY',
-        'sim_mode': True
-    }
-
-def main():
-    """Main application function."""
-    # Load custom CSS
-    load_css()
-    
-    # Header
-    st.markdown("""
-        <div style='text-align: center; padding: 20px 0;'>
-            <h1 style='color: #0066CC; font-size: 2.5rem; margin-bottom: 0;'>
-                🏦 JPMorgan Smart Receivables Navigator
-            </h1>
-            <p style='color: #666; font-size: 1.1rem; margin-top: 5px;'>
-                AI-Powered Financial Intelligence Platform
-            </p>
-        </div>
-    """, unsafe_allow_html=True)
-    
-    # User information setup - only show if not already set
-    # This section is now handled within load_data
-    
-    # Check environment variables
-    check_environment_variables()
-    
-    # Configuration panel
-    config = render_configuration_panel()
-    
-    st.markdown("---")
-    
-    # Load data
-    invoices_df, payments_df, merged_df = load_data()
-    
-    # If we have data, perform quality validation
-    if merged_df is not None:
+    # Process uploaded files
+    if uploaded_invoices is not None and uploaded_payments is not None:
         try:
-            quality_results = validate_data_quality(merged_df)
-            quality_score = get_quality_score(quality_results)
-            st.session_state.quality_score = quality_score
+            # Load data
+            invoices_df = pd.read_csv(uploaded_invoices)
+            payments_df = pd.read_csv(uploaded_payments)
             
-            if quality_score < 0.7:
-                st.warning(f"⚠️ Data quality score is {quality_score:.1%}. Some analyses may be affected.")
-        except Exception as e:
-            st.warning(f"⚠️ Could not validate data quality: {str(e)}")
-            logger.warning(f"Data quality validation error: {e}")
-    
-    # Tab navigation with custom styling
-    st.markdown("""
-        <style>
-        .stTabs [data-baseweb="tab-list"] {
-            height: 60px;
-            background-color: #f0f2f6;
-            border-radius: 10px 10px 0 0;
-        }
-        .stTabs [data-baseweb="tab"] {
-            height: 60px;
-            font-size: 18px;
-            font-weight: 600;
-            padding: 0 24px;
-        }
-        .stTabs [aria-selected="true"] {
-            background-color: #0066CC !important;
-            color: white !important;
-        }
-        </style>
-    """, unsafe_allow_html=True)
-    
-    # Tab structure - new order: KPI Cockpit, Smart Actions, AI Assistant, CFO Dashboard, Heat Map, What-If Simulator
-    if merged_df is not None:
-        tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
-            "📈 KPI Cockpit", 
-            "⚡ Smart Actions",
-            "🤖 AI Assistant",
-            "📊 CFO Dashboard", 
-            "🔥 Heat Map", 
-            "🎯 What-If Simulator",
-            "📧 Quick Email"
-        ])
-        
-        with tab1:
-            render_kpi_dashboard(merged_df, config)
-        
-        with tab2:
-            render_automation_center(merged_df, config)
-        
-        with tab3:
-            st.markdown("### 🤖 AI Financial Assistant")
-            st.markdown("Ask questions about your receivables data in natural language.")
+            st.success(f"✅ Loaded {len(invoices_df)} invoices and {len(payments_df)} payments")
             
-            # Chat interface
-            query = st.text_input(
-                "Ask a question:",
-                placeholder="e.g., 'What are our top overdue customers?' or 'Show me payment trends'",
-                key="chat_query"
+            # Show data preview
+            st.markdown("### 📊 Data Preview")
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.markdown("**Invoice Data:**")
+                st.dataframe(invoices_df.head(), use_container_width=True)
+            
+            with col2:
+                st.markdown("**Payment Data:**")
+                st.dataframe(payments_df.head(), use_container_width=True)
+            
+            # Basic analytics
+            st.markdown("### 📈 Basic Analytics")
+            
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                st.metric("Total Invoices", len(invoices_df))
+            
+            with col2:
+                st.metric("Total Payments", len(payments_df))
+            
+            with col3:
+                if 'amount' in invoices_df.columns:
+                    total_amount = invoices_df['amount'].sum()
+                    st.metric("Total Invoice Amount", f"${total_amount:,.2f}")
+            
+            # AI Chat section
+            st.markdown("### 🤖 AI Assistant")
+            st.markdown("Ask questions about your receivables data:")
+            
+            user_question = st.text_input(
+                "Your question:",
+                placeholder="e.g., What are my top overdue invoices?",
+                key="ai_question"
             )
             
-            if st.button("Send", type="primary"):
-                if query:
-                    with st.spinner("🤔 Analyzing your data..."):
-                        try:
-                            df_dict = {
-                                'invoices': invoices_df.to_dict() if invoices_df is not None else {},
-                                'payments': payments_df.to_dict() if payments_df is not None else {},
-                                'merged': merged_df.to_dict() if merged_df is not None else {}
-                            }
-                            response = ask_llm(query, df_dict)
-                            st.markdown("**🤖 AI Response:**")
-                            st.markdown(response)
-                        except Exception as e:
-                            st.error(f"❌ Error getting AI response: {str(e)}")
-                            logger.error(f"AI assistant error: {e}")
-        
-        with tab4:
-            render_cfo_panel(merged_df, config)
-        
-        with tab5:
-            render_heatmap(merged_df, config)
-        
-        with tab6:
-            render_what_if_simulator(merged_df, config)
+            if st.button("🤖 Ask AI", key="ask_ai"):
+                if user_question:
+                    with st.spinner("🤖 AI is analyzing your data..."):
+                        # Simple AI response for now
+                        st.info("AI analysis feature is being loaded. This will provide insights about your receivables data.")
+                else:
+                    st.error("Please enter a question.")
             
-        with tab7:
-            st.subheader("📧 Quick AI Email")
-
-            # Check if email is configured
-            if not st.session_state.get("recipient"):
-                st.warning("⚠️ Please configure your email address in the sidebar first.")
-                st.info("Go to the sidebar and enter your email address, then click 'Save Information'.")
-                st.stop()
-
-            # Email configuration status - only test once
-            if "email_tested" not in st.session_state:
-                st.session_state["email_tested"] = False
-            
-            if not st.session_state["email_tested"]:
-                with st.spinner("Testing email configuration..."):
-                    from email_utils import test_email_connection
-                    if test_email_connection():
-                        st.session_state["email_tested"] = True
-                        st.success("✅ Email configuration working")
-                    else:
-                        st.session_state["email_tested"] = True
-                        st.error("❌ Email configuration failed. Check Gmail app password.")
-                        st.info("The email drafting will still work, but sending may fail.")
-
-            # Email interface
-            st.markdown(f"**📧 Sending to:** {st.session_state['recipient']}")
-            
-            col1, col2 = st.columns([3,1])
-            with col1:
-                user_prompt = st.text_area(
-                    "What should the email say?", 
-                    placeholder="e.g., 'Send a reminder about overdue invoice INV001'",
-                    key="email_prompt"
-                )
-            with col2:
-                draft_button = st.button("💬 Generate Draft", type="primary", key="draft_button")
-                
-                if draft_button:
-                    if not user_prompt.strip():
-                        st.error("Please type something for the email.")
-                    else:
-                        with st.spinner("🤖 Generating email draft..."):
-                            try:
-                                draft = draft_email(user_prompt)
-                                st.session_state["email_draft"] = f"{draft}\n\n{FIXED_LINE}"
-                                st.success("✅ Draft generated successfully!")
-                                st.rerun()
-                            except Exception as e:
-                                st.error(f"❌ Error generating draft: {str(e)}")
-
-            # Show draft if exists
-            if "email_draft" in st.session_state:
-                st.markdown("### 📝 Email Preview")
-                edited_draft = st.text_area(
-                    "Edit the draft if needed:", 
-                    st.session_state["email_draft"], 
-                    height=200,
-                    key="email_editor"
-                )
-                
-                col1, col2, col3 = st.columns([1, 1, 1])
-                with col1:
-                    send_button = st.button("🚀 Send Email", type="primary", key="send_button")
-                    if send_button:
-                        with st.spinner("📧 Sending email..."):
-                            try:
-                                success = send_email(
-                                    st.session_state["recipient"],
-                                    "Your requested information",
-                                    edited_draft
-                                )
-                                if success:
-                                    st.success(f"✅ Email sent to {st.session_state['recipient']}")
-                                    # Clear the draft after successful send
-                                    del st.session_state["email_draft"]
-                                    st.rerun()
-                                else:
-                                    st.error("❌ Failed to send email. Check the logs above.")
-                            except Exception as e:
-                                st.error(f"❌ Error sending email: {str(e)}")
-                
-                with col2:
-                    if st.button("🗑️ Clear Draft", key="clear_draft"):
-                        if "email_draft" in st.session_state:
-                            del st.session_state["email_draft"]
-                        st.rerun()
-                
-                with col3:
-                    if st.button("📝 New Draft", key="new_draft"):
-                        if "email_draft" in st.session_state:
-                            del st.session_state["email_draft"]
-                        st.rerun()
+        except Exception as e:
+            st.error(f"❌ Error processing files: {str(e)}")
+            st.info("Please make sure your CSV files have the correct format.")
     
     else:
-        # Empty state with helpful information
+        # Empty state
         st.markdown("""
             <div style='text-align: center; padding: 60px 20px;'>
                 <h3 style='color: #666;'>📤 No Data Loaded</h3>
@@ -447,11 +164,6 @@ INV003,CUST001,8000,2024-02-01,2024-03-03,overdue""")
 PAY001,INV002,25000,2024-02-15,bank_transfer
 PAY002,INV001,5000,2024-02-20,check
 PAY003,INV003,8000,2024-03-10,credit_card""")
-    
-    # Auto-refresh functionality
-    if config.get('auto_refresh', False) and merged_df is not None:
-        time.sleep(30)
-        st.rerun()
 
 if __name__ == "__main__":
     main()
