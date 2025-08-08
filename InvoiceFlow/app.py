@@ -35,40 +35,14 @@ except Exception as e:
 
 # Add API test button to sidebar
 if st.sidebar.button("🧪 Test API Call"):
-    import requests
     try:
-        api_key = st.secrets.get("OPENROUTER_API_KEY") or os.environ.get("OPENROUTER_API_KEY")
-        if not api_key:
-            st.sidebar.error("❌ Missing OPENROUTER_API_KEY")
-        else:
-            st.sidebar.info(f"🔍 Testing API key: {api_key[:10]}...{api_key[-4:]}")
-            
-            headers = {
-                "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json",
-                "HTTP-Referer": st.secrets.get("APP_REFERRER", ""),
-                "X-Title": st.secrets.get("APP_TITLE", ""),
-            }
-            
-            payload = {
-                "model": "openrouter/auto",
-                "messages": [{"role": "user", "content": "Say OK"}],
-                "max_tokens": 5
-            }
-            
-            r = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, json=payload)
-            
-            if r.status_code == 200:
-                st.sidebar.success("✅ API call successful!")
-            elif r.status_code == 401:
-                st.sidebar.error("❌ 401 Unauthorized - Check API key")
-                st.sidebar.write(f"Response: {r.text}")
-            else:
-                st.sidebar.warning(f"⚠️ Status: {r.status_code}")
-                st.sidebar.write(f"Response: {r.text}")
-                
+        from ai_client import call_ai
+        messages = [{"role": "user", "content": "Say OK"}]
+        response = call_ai(messages, max_tokens=10)
+        st.sidebar.success("✅ API call successful!")
+        st.sidebar.write(f"Response: {response}")
     except Exception as e:
-        st.sidebar.error(f"❌ Error: {e}")
+        st.sidebar.error(f"❌ API Error: {e}")
 
 
 # Configure logging
