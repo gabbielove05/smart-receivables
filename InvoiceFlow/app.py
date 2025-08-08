@@ -19,7 +19,7 @@ from dashboards import render_cfo_panel, render_kpi_dashboard, render_heatmap, r
 from smart_actions import generate_next_best_actions, render_automation_center
 from data_quality import validate_data_quality, get_quality_score
 from ml_models import train_models, get_model_explanations
-from utils import load_css, normalize_data, generate_sample_data
+from utils import normalize_data, generate_sample_data
 from email_utils import draft_email, send_email, FIXED_LINE
 
 # Configure logging
@@ -207,9 +207,6 @@ def render_configuration_panel():
 
 def main():
     """Main application function."""
-    # Load custom CSS
-    load_css()
-    
     # Header
     st.title("🏦 JPMorgan Smart Receivables Navigator")
     st.markdown("**AI-Powered Financial Intelligence Platform**")
@@ -240,27 +237,6 @@ def main():
         except Exception as e:
             st.warning(f"⚠️ Could not validate data quality: {str(e)}")
             logger.warning(f"Data quality validation error: {e}")
-    
-    # Tab navigation with custom styling
-    st.markdown("""
-        <style>
-        .stTabs [data-baseweb="tab-list"] {
-            height: 60px;
-            background-color: #f0f2f6;
-            border-radius: 10px 10px 0 0;
-        }
-        .stTabs [data-baseweb="tab"] {
-            height: 60px;
-            font-size: 18px;
-            font-weight: 600;
-            padding: 0 24px;
-        }
-        .stTabs [aria-selected="true"] {
-            background-color: #0066CC !important;
-            color: white !important;
-        }
-        </style>
-    """, unsafe_allow_html=True)
     
     # Tab structure - new order: KPI Cockpit, Smart Actions, AI Assistant, CFO Dashboard, Heat Map, What-If Simulator
     if merged_df is not None:
