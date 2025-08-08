@@ -43,6 +43,7 @@ st.set_page_config(
 )
 
 # Normal Streamlit mode - no custom styling
+# Updated: 2025-08-08 - API key debugging
 
 def check_environment_variables():
     """Check for required environment variables and display warnings."""
