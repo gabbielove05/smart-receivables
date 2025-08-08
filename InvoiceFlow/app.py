@@ -12,16 +12,6 @@ from datetime import datetime, timedelta
 import json
 import time
 
-# Import custom modules
-from chatbot import ask_llm
-from integrations import call_client, send_teams_alert
-from dashboards import render_cfo_panel, render_kpi_dashboard, render_heatmap, render_what_if_simulator
-from smart_actions import generate_next_best_actions, render_automation_center
-from data_quality import validate_data_quality, get_quality_score
-from ml_models import train_models, get_model_explanations
-from utils import load_css, normalize_data, generate_sample_data
-from email_utils import draft_email, send_email, FIXED_LINE
-
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -36,6 +26,25 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
+
+# Simple test to ensure app starts
+st.title("🏦 JPMorgan Smart Receivables Navigator")
+st.markdown("---")
+
+# Try to import custom modules with error handling
+try:
+    from chatbot import ask_llm
+    from integrations import call_client, send_teams_alert
+    from dashboards import render_cfo_panel, render_kpi_dashboard, render_heatmap, render_what_if_simulator
+    from smart_actions import generate_next_best_actions, render_automation_center
+    from data_quality import validate_data_quality, get_quality_score
+    from ml_models import train_models, get_model_explanations
+    from utils import load_css, normalize_data, generate_sample_data
+    from email_utils import draft_email, send_email, FIXED_LINE
+    st.success("✅ All modules imported successfully!")
+except ImportError as e:
+    st.error(f"❌ Import error: {e}")
+    st.info("Some features may not be available. Please check the logs for details.")
 
 def check_environment_variables():
     """Check for required environment variables and display warnings."""
