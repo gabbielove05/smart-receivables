@@ -15,6 +15,14 @@ def _secret(name, default=""):
 def get_client():
     """Initialize and return an OpenAI client pointed to OpenRouter."""
     api_key = (_secret("OPENROUTER_API_KEY") or "").strip()
+    
+    # Debug: Print what we found
+    print(f"🔍 API Key found: {'Yes' if api_key else 'No'}")
+    if api_key:
+        print(f"🔍 API Key starts with: {api_key[:10]}...{api_key[-4:]}")
+    else:
+        print("🔍 No API key found in secrets")
+    
     if not api_key.startswith("sk-or-"):
         raise RuntimeError("OPENROUTER_API_KEY not found or invalid in Streamlit Secrets.")
     return OpenAI(
